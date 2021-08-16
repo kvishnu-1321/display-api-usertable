@@ -1,33 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Pagination from "./components/Pagination"
+import Pagination from './components/Pagination';
 
 import './style.css';
-  const URL = 'https://gorest.co.in/public/v1/users?page='
-  const postPerPage = 100;
-  const totalPosts = 1000;
+const URL = 'https://gorest.co.in/public/v1/users?page=';
+const postPerPage = 100;
+const totalPosts = 1000;
 
-  const Table = () => {
-      const [info, setEmployees] = React.useState([]);
-      const [currentPage, setCurrentPage ] = useState(1);
-      
-      React.useEffect(() => {
-          getData()
-      }, [])
-  
-      const getData = async () => {
-  
-          const response = await axios.get(URL+ `${currentPage}`)
-          setEmployees(response.data)
-      }
-  
-      const removeData = (id) => {
-  
-          axios.delete(info.data.id).then(res => {
-              const del = info.filter(employee => id !== employee.id)
-              setEmployees(del)
-          })
-      }
+const Table = () => {
+  const [info, setEmployees] = React.useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  React.useEffect(() => {
+    getData(currentPage);
+  }, []);
+
+  const getData = async indexNumber => {
+    const response = await axios.get(URL + `${indexNumber}`);
+    setEmployees(response.data);
+  };
+  const loadNextPageData = () => {
+    setCurrentPage(currentPage + 1);
+    getData(currentPage + 1);
+  };
+
+  const loadPreviousPageData = () => {
+    setCurrentPage(currentPage - 1);
+    getData(currentPage - 1);
+  };
+
+  const pagiNavigate = pageIndex => {
+    setCurrentPage(pageIndex);
+    getData(pageIndex);
+  };
+
+  const removeData = id => {
+    //  axios.delete(info.data.id).then(res => {
+    //const del = info.data.filter(employee => {
+    // console.log(id);
+    // console.log(employee.id);
+    //  return id !== employee.id;
+    //});
+    //info.data = del;
+    setEmployees(
+      info.data.splice(info.data.findIndex(item => item.id === id), 1)
+    );
+    //getData();
+    // })
+  };
 
   const renderHeader = () => {
     let headerElement = ['id', 'name', 'email', 'gender', 'status', 'action'];
@@ -48,13 +68,13 @@ import './style.css';
             <td>{email}</td>
             <td>{gender}</td>
             <td>{status}</td>
-            <td className='opration'>
-                        <button className='button' onClick={() => removeData(info.id)}>Delete</button>
-                        <button  onClick={() => editData(id)}>Edit</button>
-                        <button  onClick={() => ViewData(id)}>View</button>
-             </td>  
-       
-          
+            <td className="opration">
+              <button className="button" onClick={() => removeData(id)}>
+                Delete
+              </button>
+              <button onClick={() => editData(id)}>Edit</button>
+              <button onClick={() => ViewData(id)}>View</button>
+            </td>
           </tr>
         );
       })
@@ -71,26 +91,13 @@ import './style.css';
         <tbody>{renderBody()}</tbody>
       </table>
 
-<div className='pag-row' >
-      <button onClick={() => {() => {
-    setCurrentPage(currentPage - 1);
-    <Table />
-       }}}>prev</button>
+      <div className="pag-row">
+        <button onClick={() => loadPreviousPageData()}>prev</button>
 
+        <Pagination postsPerPage={postPerPage} totalPosts={totalPosts} />
 
-      <Pagination  postsPerPage={postPerPage} totalPosts={totalPosts}/>
-
-     
-
-      <button onClick={() => {() => {
-    setCurrentPage(currentPage + 1);
-    <Table />
-       }}}>Next</button>
-   
-    </div>   
-
-
-
+        <button onClick={() => loadNextPageData()}>Next</button>
+      </div>
     </div>
   );
 };

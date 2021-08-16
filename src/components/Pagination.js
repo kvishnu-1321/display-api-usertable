@@ -1,6 +1,11 @@
 import React from 'react';
+import pagiNavigate from '../App';
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const pagiNavigate = number => {
+  pagiNavigate(number);
+};
+
+const Pagination = ({ postsPerPage, totalPosts }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -9,10 +14,14 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
 
   return (
     <nav>
-      <ul className='pagination '>
+      <ul className="pagination ">
         {pageNumbers.map(number => (
-          <li key={number} className='page-item'>
-            <a onClick={() => paginate(number)} href='!#' className='page-link'>
+          <li key={number} className="page-item">
+            <a
+              onClick={() => pagiNavigate(number)}
+              href="!#"
+              className="page-link"
+            >
               {number}
             </a>
           </li>
