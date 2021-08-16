@@ -54,3 +54,18 @@ body {
 .button:active {
   border: 1px solid blue;
 }
+.pag-row{
+  display:flex;
+  justify-content: center;
+}
+.pagination{
+  justify-content: center;
+   display:flex;
+}
+.page-item{
+   list-style: none;
+  padding-right: 15px;
+}
+.page-item a{
+  text-decoration: none;
+}

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Pagination from "./components/Pagination"
+
 import './style.css';
   const URL = 'https://gorest.co.in/public/v1/users?page='
+  const postPerPage = 100;
+  const totalPosts = 1000;
 
   const Table = () => {
       const [info, setEmployees] = React.useState([]);
@@ -9,7 +13,7 @@ import './style.css';
       
       React.useEffect(() => {
           getData()
-      }, [currentPage])
+      }, [])
   
       const getData = async () => {
   
@@ -67,17 +71,23 @@ import './style.css';
         <tbody>{renderBody()}</tbody>
       </table>
 
-
-
+<div className='pag-row' >
       <button onClick={() => {() => {
     setCurrentPage(currentPage - 1);
+    <Table />
        }}}>prev</button>
+
+
+      <Pagination  postsPerPage={postPerPage} totalPosts={totalPosts}/>
+
+     
 
       <button onClick={() => {() => {
     setCurrentPage(currentPage + 1);
+    <Table />
        }}}>Next</button>
    
-       
+    </div>   
 
 
 
